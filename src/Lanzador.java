@@ -5,108 +5,112 @@ import java.io.InputStreamReader;
 
 public class Lanzador {
 
-
     public int ejecutarNivel1(String numero) {
         try {
-            ProcessBuilder pb = new ProcessBuilder("wsl", "factor", numero);
-            Process proceso = pb.start();
+            ProcessBuilder pb = new ProcessBuilder("factor", numero);
+            Process p = pb.start();
 
-            // Leer flujo de salida estándar
-            BufferedReader reader = new BufferedReader(new InputStreamReader(proceso.getInputStream()));
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                System.out.println(linea);
+            BufferedReader lector1 = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String linea1;
+            while ((linea1 = lector1.readLine()) != null) {
+                System.out.println(linea1);
             }
 
-            // Leer flujo de error
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(proceso.getErrorStream()));
-            String errorLinea;
-            while ((errorLinea = errorReader.readLine()) != null) {
-                System.out.println(errorLinea);
+            BufferedReader lector2 = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            String linea2;
+            while ((linea2 = lector2.readLine()) != null) {
+                System.out.println(linea2);
             }
 
-            // waitFor() siempre al final tras leer los flujos
-            return proceso.waitFor();
+            return p.waitFor();
         } catch (IOException | InterruptedException e) {
-            System.out.println("Error al ejecutar el proceso: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             return 1;
         }
     }
-
 
     public int ejecutarNivel2(String numero) {
         try {
             ProcessBuilder pb = new ProcessBuilder("factor", numero);
-            Process proceso = pb.start();
+            Process p = pb.start();
 
-            // Cada canal se etiqueta de forma independiente línea por línea
-            BufferedReader reader = new BufferedReader(new InputStreamReader(proceso.getInputStream()));
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                System.out.println("[OK] " + linea);
+            BufferedReader lector1 = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String linea1;
+            while ((linea1 = lector1.readLine()) != null) {
+                System.out.println("[OK] " + linea1);
             }
 
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(proceso.getErrorStream()));
-            String errorLinea;
-            while ((errorLinea = errorReader.readLine()) != null) {
-                System.out.println("[ERROR] " + errorLinea);
+            BufferedReader lector2 = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            String linea2;
+            while ((linea2 = lector2.readLine()) != null) {
+                System.out.println("[ERROR] " + linea2);
             }
 
-            return proceso.waitFor();
+            return p.waitFor();
         } catch (IOException | InterruptedException e) {
-            System.out.println("[ERROR] Error al ejecutar el proceso: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             return 1;
         }
     }
-
 
     public int ejecutarNivel3(String numero) {
         try {
             ProcessBuilder pb = new ProcessBuilder("factor", numero);
 
-            // Nombres exactos exigidos en el enunciado y modo append (añadir)
             pb.redirectOutput(ProcessBuilder.Redirect.appendTo(new File("factor_output.log")));
             pb.redirectError(ProcessBuilder.Redirect.appendTo(new File("factor_error.log")));
 
-            Process proceso = pb.start();
-            return proceso.waitFor();
+            Process p = pb.start();
+            return p.waitFor();
         } catch (IOException | InterruptedException e) {
-            System.out.println("Error al redirigir salida a ficheros: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             return 1;
         }
     }
 
-
     public int ejecutarNivel4(String numero) {
         try {
             ProcessBuilder pb = new ProcessBuilder("factor", numero);
-            Process proceso = pb.start();
+            Process p = pb.start();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(proceso.getInputStream()));
-            String salida = reader.readLine();
+            BufferedReader lector1 = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String linea1 = lector1.readLine();
+            if (linea1 != null) {
+                System.out.println(linea1);
+            }
 
-            if (salida != null) {
-                System.out.println(salida);
+            BufferedReader lector2 = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            String linea2 = lector2.readLine();
+            if (linea2 != null) {
+                System.out.println(linea2);
+            }
 
-                // factor devuelve "n: n" únicamente cuando n es primo
-                String patronPrimo = numero + ": " + numero;
-                if (salida.trim().equals(patronPrimo)) {
+            try {
+                int n = Integer.parseInt(numero);
+                if (esPrimo(n)) {
                     System.out.println("¡" + numero + " es primo!");
                 } else {
                     System.out.println(numero + " no es primo");
                 }
+            } catch (NumberFormatException e) {
             }
 
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(proceso.getErrorStream()));
-            String error = errorReader.readLine();
-            if (error != null) {
-                System.out.println(error);
-            }
-
-            return proceso.waitFor();
+            return p.waitFor();
         } catch (IOException | InterruptedException e) {
-            System.out.println("Error al ejecutar el proceso: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             return 1;
         }
+    }
+
+    private boolean esPrimo(int n) {
+        if (n <= 1) {
+            return false;
+        }
+        for (int i = 2; i * i <= n; i++) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

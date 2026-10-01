@@ -6,14 +6,11 @@ public class Interfaz {
         Lanzador lanzador = new Lanzador();
 
         System.out.println("¿Qué nivel quieres usar? (1, 2, 3 o 4):");
-        System.out.print("> ");
         String opcionNivel = scanner.nextLine().trim();
 
         while (true) {
             System.out.println("Introduce un número (o 'salir' para terminar):");
-            System.out.print("> ");
 
-            // Leemos la entrada como cadena completa para evaluar 'salir' y no validar tipos
             String input = scanner.nextLine().trim();
 
             if (input.equalsIgnoreCase("salir")) {
