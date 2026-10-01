@@ -1,32 +1,47 @@
 import java.util.Scanner;
 
 public class Interfaz {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Lanzador lanzador = new Lanzador();
 
         System.out.println("¿Qué nivel quieres usar? (1, 2, 3 o 4):");
-        String nivel = scanner.nextLine().trim();
+        System.out.print("> ");
+        String opcionNivel = scanner.nextLine().trim();
 
-        if (nivel.equals("1")){
-            ejecutarNivel1(scanner, lanzador);
-        } else {
-            System.out.println("Ese nivel no esta");
-        }
-        scanner.close();
-    }
-
-    private static void ejecutarNivel1(Scanner scanner, Lanzador lanzador){
-        while(true){
+        while (true) {
             System.out.println("Introduce un número (o 'salir' para terminar):");
-            String entrada = scanner.nextLine().trim();
+            System.out.print("> ");
 
-            if (entrada.equalsIgnoreCase("Salir")){
+            // Leemos la entrada como cadena completa para evaluar 'salir' y no validar tipos
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("salir")) {
                 System.out.println("Saliendo del programa");
                 break;
             }
-            int exitCode = lanzador.ejecutaFactor(entrada);
-            System.out.println("Operación completada. Código de salida:" + exitCode);
+
+            int codigoSalida;
+
+            switch (opcionNivel) {
+                case "2":
+                    codigoSalida = lanzador.ejecutarNivel2(input);
+                    break;
+                case "3":
+                    codigoSalida = lanzador.ejecutarNivel3(input);
+                    break;
+                case "4":
+                    codigoSalida = lanzador.ejecutarNivel4(input);
+                    break;
+                case "1":
+                default:
+                    codigoSalida = lanzador.ejecutarNivel1(input);
+                    break;
+            }
+
+            System.out.println("Operación completada. Código de salida: " + codigoSalida);
         }
+
+        scanner.close();
     }
 }
