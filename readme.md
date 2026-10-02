@@ -1,5 +1,3 @@
-# Auditoría Cósmica: El Detector de Primos
-
 ## Niveles realizados
 He realizado los Niveles 1, 2, 3 y 4.
 
@@ -17,7 +15,7 @@ He realizado los Niveles 1, 2, 3 y 4.
 ## Error encontrado durante el desarrollo
 Un error que tuve al probar el Nivel 4 fue un `NumberFormatException` cuando introducía textos como `"hola"` o números negativos. El programa intentaba hacer `Integer.parseInt(numero)` para pasar la entrada al bucle que comprueba si es primo y fallaba.
 
-Lo solucioné metiendo el parseo del número dentro de un bloque `try-catch (NumberFormatException e)`. De esta forma, si la entrada no es un entero válido, se captura el fallo y el programa continúa normalmente para que el comando `factor` muestre su propio mensaje de error por la salida correspondiente.
+Lo solucioné metiendo el parseo del número dentro de un bloque `try-catch (NumberFormatException e)`. Asi, si la entrada no es un entero válido, se captura el fallo y el programa continúa normalmente para que el comando `factor` muestre su propio mensaje de error por la salida.
 ## Contenido de los ficheros de log (Nivel 3)
 
 ### `factor_output.log`
